@@ -26,21 +26,7 @@ public class StateNode implements Comparable<StateNode> {
 	
 	public int calculateFunctionValue()
 	{
-		int hn = 0;
-		if(StateNode.input_type == 1)
-		{
-			hn = 0;
-		}
-		if(StateNode.input_type == 2)
-		{
-			hn = getMisplacedTileHeuristic();
-		}
-		if(StateNode.input_type == 3)
-		{
-			hn = getManhattanDistance();
-		}
-		
-		return hn + this.gn;
+		return calculateHNValue() + this.gn;
 	}
 	
 	public int calculateHNValue()
