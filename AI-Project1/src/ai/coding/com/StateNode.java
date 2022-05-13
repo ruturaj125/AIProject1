@@ -2,7 +2,7 @@ package ai.coding.com;
 
 import java.util.*;
 
-public class StateNode {
+public class StateNode implements Comparable<StateNode> {
 
 	public int function_value;
 	public int[][] positions;
@@ -12,6 +12,7 @@ public class StateNode {
 	public StateNode(int[][] a, int level, int input)
 	{
 		StateNode.input_type = input;
+		this.positions = new int[3][3];
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 3; j++)
@@ -40,6 +41,25 @@ public class StateNode {
 		}
 		
 		return hn + this.gn;
+	}
+	
+	public int calculateHNValue()
+	{
+		int hn = 0;
+		if(StateNode.input_type == 1)
+		{
+			hn = 0;
+		}
+		if(StateNode.input_type == 2)
+		{
+			hn = getMisplacedTileHeuristic();
+		}
+		if(StateNode.input_type == 3)
+		{
+			hn = getManhattanDistance();
+		}
+		
+		return hn;
 	}
 	
 	private int getMisplacedTileHeuristic()
@@ -105,7 +125,7 @@ public class StateNode {
 		return ans;
 	}
 	
-	public List<StateNode> getChildrens()
+	public ArrayList<StateNode> getChildrens()
 	{
 		ArrayList<StateNode> childrens = new ArrayList<StateNode>();
 		
@@ -143,7 +163,7 @@ public class StateNode {
 						 StateNode b = new StateNode(child,this.gn+1, StateNode.input_type);
 						 childrens.add(b);
 					}
-					if(i+1>=0)
+					if(i+1<3)
 					{
 						int[][] child = new int[3][3];
 						for (int x = 0; x < 3; x++)
@@ -157,7 +177,7 @@ public class StateNode {
 						 StateNode b = new StateNode(child,this.gn+1, StateNode.input_type);
 						 childrens.add(b);
 					}
-					if(j+1>=0)
+					if(j+1<3)
 					{
 						int[][] child = new int[3][3];
 						for (int x = 0; x < 3; x++)
@@ -188,4 +208,12 @@ public class StateNode {
 	     return copy;
 	}
 
+	@Override
+	public int compareTo(StateNode o) {
+		if(this.function_value == o.function_value)
+		{
+			return ((this.calculateHNValue() - o.calculateHNValue()));
+		}
+		return this.function_value - o.function_value;
+	}
 }
